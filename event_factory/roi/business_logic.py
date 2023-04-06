@@ -71,18 +71,35 @@ class RoIBusinessLogic(BusinessLogic):
 
     Methods:
     --------
-    _get_starting_events() -> List[EventStartedSignal]:
-        Returns a list of new events that have just started.
-    _get_ending_events() -> List[EventEndedSignal]:
-        Returns a list of events that have just ended.
-    _is_start_event(key: str, event: Event) -> bool:
-        Returns True if the event should be considered started.
-    _is_end_event(key: str) -> bool:
-        Returns True if the event should be considered ended.
-    process(detection: Detection) -> List[Union[EventEndedSignal,
-                                                EventStartedSignal]]:
-        Processes a new detection and returns a list of events that have
-        started of ended.
+    _add_count(self) -> dict:
+        Returns a dict simulating an object for predictions that contains
+        information the count of the chairs, so that we can draw it on screen.
+        
+    def _create_point(self, point : dict, name : str) -> dict:
+        Returns a dict simulating an object for predictions, the name and the
+        point of the object can be inputed into the fucntion.
+        
+    _insert_info(self, detection : Detection) -> Detection:
+        Inserts the info we want to draw on the screen on the Detection class.
+    
+    _calculate_medium_point(self, chair) -> dict:
+        Returns the medium point of an object detected by the AI.
+        
+    _create_chair_map(self, detection : Detection) -> List[List[dict]]:
+        Returns a matrix with the medium points of the chairs mapping all 
+        the chairs in their respective lines.
+        
+    _check_chair_map(self, detection) -> bool:
+        Check if any of the chairs in the _chair_map matrix need to change
+        state and returns if any chair has changed estate.
+        
+    _check_chair_occupied(self, line : int, column : int, detection : Detection) -> bool:
+        Checks if an especific chair needs to change state or not, and returns a bool
+        telling if the chair changed states.
+        
+    _create_event(self, detection: Detection) -> List[Union[EventStartedSignal, EventEndedSignal]]:
+        Returns a list with the starter and the ender of the same event
+        so that the event starts and ends in the same frame.
     """
 
     def __init__(self):
