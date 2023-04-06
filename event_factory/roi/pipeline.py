@@ -31,16 +31,8 @@ class Pipeline(EventPipeline):
                                                         EventStartedSignal]:
 
         detection = self._region_of_interest.process(detection)
-        # print()
-        # print(detection)
         detection = self.filter_object.process(detection)
-        # print("============filtro=======",)
-        # print( detection)
-        # print("============================")
         event = self._business_logic.process(detection)
-        # print("--------------------------------")
-        # print(f"\nEVENT====={event}\n")
-        # print("--------------------------------")
         
 
         return event
