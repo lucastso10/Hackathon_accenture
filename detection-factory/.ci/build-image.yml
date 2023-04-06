@@ -1,0 +1,48 @@
+trigger:
+  branches:
+    include:
+    - master
+
+resources:
+- repo: self
+
+variables:
+  - group: aiv-common
+  - name: "tag" 
+    value: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self      
+      fetchDepth: 1
+      clean: true
+      
+    - task: Docker@2
+      displayName: Build image
+      inputs:
+        containerRegistry: '$(registry.service.connection.name)'
+        repository: 'accenture_detection_factory_base'
+        command: 'build'
+        Dockerfile: ./Dockerfile
+        arguments: '--build-arg TOKEN=$(System.AccessToken)'
+
+    - task: Docker@2
+      displayName: Push image
+      inputs:
+        containerRegistry: '$(registry.service.connection.name)'
+        repository: 'accenture_detection_factory_base'
+        command: 'push'
+
+    - task: PublishBuildArtifacts@1
+      displayName: publish chart artifact
+      inputs:
+        PathtoPublish: '.ci/helm-chart'
+        ArtifactName: 'chart'
+        publishLocation: 'Container'
