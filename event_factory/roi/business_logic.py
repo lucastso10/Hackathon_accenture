@@ -200,6 +200,11 @@ class RoIBusinessLogic(BusinessLogic):
         """
         Creates a matrix of all the chairs in the detection.
         This method is only supposed to be run once on the first frame.
+        This methods works by using a chair for reference in a line
+        assuming that with a marging of error every other chair medium
+        point that is in that line should have that height.
+        If it detects a chair that is way to high or low, it uses
+        that chair as a reference for another line of chairs.
         It filter lines of chairs that has only 4 assuming that
         they are probably an erorr commited by the ai.
         The matrix it returns will be used as the reference map
